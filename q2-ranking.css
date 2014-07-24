@@ -1,0 +1,43 @@
+:host {
+	display: block;
+}
+
+/* To ensure your styling works under the Shadow DOM polyfill, see
+	 www.polymer-project.org/docs/polymer/styling.html#directives */
+polyfill-next-selector { content: ':host > h2'; }
+::content h2 {
+	color: blue;
+}
+
+:host ol {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+:host li {
+	padding: .375em .75em;
+	margin: .25em;
+	height: 1.5em;
+	min-width: 2em;
+	color: #fff;
+	background: #4555a5;
+	position: relative;
+	border: 1px dashed #4555a5;
+	border-radius: .25em;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	display: inline-block;
+	width: 47%;
+}
+
+:host li span {
+	height: 1.5em;
+	display: inline-block;
+	vertical-align: top;
+	line-height: 1.5em;
+}
+
+:host [rel=placeholder] {
+	border: 1px dashed #4555a5;
+	background: none;
+}

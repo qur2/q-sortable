@@ -1,0 +1,135 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+		<seed-element></seed-element>
+
+@element seed-element
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://polymerlabs.github.io/seed-element
+-->
+<polymer-element name="q2-ranking">
+
+	<template>
+
+		<link rel="stylesheet" href="q2-ranking.css" />
+		<ol id="ranking">
+			<template repeat="{{c in candidates}}">
+				<li draggable="true" rel="{{c.key}}">
+					<span>{{c.label}}</span>
+				</li>
+			</template>
+			<li rel="placeholder">here</li>
+		</ol>
+
+	</template>
+
+	<script>
+
+		function getIndex(node) {
+			return [].indexOf.call(node.parentNode.children, node);
+		};
+
+		var dragEl, display, placeholder;
+
+		function handleDragStart(e) {
+			if (e.stopPropagation) {
+				e.stopPropagation();
+			}
+			if (e.target.nodeName == 'LI' && e.target.hasAttribute('draggable')) {
+				var ol = e.currentTarget,
+					li = e.target;
+				// remember li display mode
+				display = li.style.display;
+				e.dataTransfer.effectAllowed = 'move';
+				// remember which node is being dragged
+				dragEl = li;
+				// timeout needed to avoid dragend being fired right away
+				window.setTimeout(function() {
+					ol.insertBefore(placeholder, dragEl);
+					dragEl.style.display = 'none';
+				}, 1);
+			}
+		}
+
+		function handleDragEnd(e) {
+			if (e.stopPropagation) {
+				e.stopPropagation();
+			}
+			var ol = e.currentTarget,
+				li = e.target;
+			e.dataTransfer.dropEffect = 'move';
+			ol.insertBefore(dragEl, placeholder);
+			// restore dragged element display mode
+			dragEl.style.display = display;
+			// detach the placeholder
+			placeholder = ol.removeChild(placeholder);
+			dragEl = null;
+		}
+
+		function handleDragEnter(e) {
+			if (e.stopPropagation) {
+				e.stopPropagation();
+			}
+			var dest;
+			if (e.target.nodeName == 'LI' && e.target.hasAttribute('draggable')) {
+				var ol = e.currentTarget,
+					li = e.target;
+				if (getIndex(placeholder) < getIndex(li)) {
+					dest = li.nextSibling;
+				} else {
+					dest = li;
+				}
+				ol.insertBefore(placeholder, dest);
+			}
+
+		}
+
+		// function handleDragLeave(e) {
+		// 	if (e.stopPropagation) {
+		// 		e.stopPropagation(); // Stops some browsers from redirecting.
+		// 	}
+		// 	// if (e.target.nodeName == 'OL') {
+		// 	// 	e.dataTransfer.effectAllowed = 'none';
+		// 	// }
+		// }
+
+		Polymer('q2-ranking', {
+
+			ready: function() {
+				// Ready is a lifecycle callback.
+				// You can do setup work in here.
+				// More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+				this.candidates = [
+					{key: 'o1', label: 'Opt 1'},
+					{key: 'o2', label: 'Opt 2'},
+					{key: 'o3', label: 'Opt 3'},
+					{key: 'o4', label: 'Opt 4'},
+				];
+
+				var list = this.$["ranking"];
+				placeholder = list.querySelector('[rel=placeholder]');
+				placeholder = list.removeChild(placeholder);
+
+				list.addEventListener('dragstart', handleDragStart, false);
+				list.addEventListener('dragenter', handleDragEnter, false)
+				// list.addEventListener('dragover', handleDragOver, false);
+				// list.addEventListener('dragleave', handleDragLeave, false);
+				// list.addEventListener('drop', handleDrop, false);
+				list.addEventListener('dragend', handleDragEnd, false);
+			},
+			getRanking: function() {
+				return [].map.call(this.$["ranking"].querySelectorAll('li'), function(node) {
+					return node.getAttribute('rel');
+				});
+			}
+
+		});
+
+	</script>
+
+</polymer-element>
