@@ -26,8 +26,10 @@ polyfill-next-selector { content: ':host > h2'; }
 	border: 1px dashed #4555a5;
 	border-radius: .25em;
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+:host-context(.horizontal) li {
 	display: inline-block;
-	width: 47%;
 }
 
 :host li span {
