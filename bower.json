@@ -1,14 +1,14 @@
 {
-  "name": "seed-element",
+  "name": "q-sortable",
   "version": "0.0.0",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Aurélien Scoubeau <aurelien.scoubeau@gmail.com>"
   ],
-  "description": "Element providing solution to no problem in particular.",
-  "keywords": "seed, polymer, web-components",
-  "main": "seed-element.html",
+  "description": "Helps with making element content sortable by drag&drop.",
+  "keywords": "sortable, polymer, web-components",
+  "main": "q-sortable.html",
   "license": "MIT",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/qur2/q-sortable/",
   "ignore": [
     "**/.*"
   ],

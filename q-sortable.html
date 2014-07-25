@@ -12,10 +12,10 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://polymerlabs.github.io/seed-element
 -->
-<polymer-element name="q2-ranking" attributes="autonum readval">
+<polymer-element name="q-sortable" attributes="autonum readval">
 
 	<template>
-		<link rel="stylesheet" href="q2-ranking.css" />
+		<link rel="stylesheet" href="q-sortable.css" />
 		<content select="div"></content>
 	</template>
 
@@ -87,7 +87,7 @@ Element providing solution to no problem in particular.
 			});
 		}
 
-		Polymer('q2-ranking', {
+		Polymer('q-sortable', {
 			autonum: '',
 			readval: '[rel]',
 			ready: function() {

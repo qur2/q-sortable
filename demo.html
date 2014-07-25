@@ -2,10 +2,10 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-	<title>q2-ranking Demo</title>
+	<title>q-sortable Demo</title>
 
 	<script src="../platform/platform.js"></script>
-	<link rel="import" href="q2-ranking.html">
+	<link rel="import" href="q-sortable.html">
 	<style type="text/css">
 	body {
 		margin: 0;
@@ -33,7 +33,7 @@
 		color: #5265a2;
 	}
 
-	q2-ranking div {
+	q-sortable div {
 		padding: .375em .75em;
 		margin: .25em;
 		height: 1.5em;
@@ -46,7 +46,7 @@
 		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	}
 
-	q2-ranking i {
+	q-sortable i {
 		display: inline-block;
 		vertical-align: top;
 		font-size: 2em;
@@ -54,14 +54,14 @@
 		font-weight: 100;
 		padding: 0 .25em 0 0;
 	}
-	q2-ranking div span {
+	q-sortable div span {
 		height: 1.5em;
 		display: inline-block;
 		vertical-align: top;
 		line-height: 1.5em;
 	}
 
-	q2-ranking div:not([draggable]) {
+	q-sortable div:not([draggable]) {
 		border: 1px dashed #4555a5;
 		background: none;
 	}
@@ -72,13 +72,13 @@
 
 <section>
 	<h1>Drag &amp; drop ranking</h1>
-	<q2-ranking autonum="i" readval="span">
+	<q-sortable autonum="i" readval="span">
 		<div><i></i><span>D&eacute;d&eacute; Jarret</span></div>
 		<div><i></i><span>Rincevent</span></div>
 		<div><i></i><span>Mustrum Ridculle</span></div>
 		<div><i></i><span>Samuel Vimaire</span></div>
 		<div><i></i><span>Cogite Stibon</span></div>
-	</q2-ranking>
+	</q-sortable>
 </section>
 
 </body>
