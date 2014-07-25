@@ -12,46 +12,36 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://polymerlabs.github.io/seed-element
 -->
-<polymer-element name="q2-ranking">
+<polymer-element name="q2-ranking" attributes="autonum">
 
 	<template>
-
 		<link rel="stylesheet" href="q2-ranking.css" />
-		<ol id="ranking">
-			<template repeat="{{c in candidates}}">
-				<li draggable="true" rel="{{c.key}}">
-					<span>{{c.label}}</span>
-				</li>
-			</template>
-			<li rel="placeholder">here</li>
-		</ol>
-
+		<content select="div"></content>
 	</template>
 
 	<script>
-
 		function getIndex(node) {
 			return [].indexOf.call(node.parentNode.children, node);
 		};
 
-		var dragEl, display, placeholder;
+		var originalElement, originalDisplay, placeholder;
 
 		function handleDragStart(e) {
 			if (e.stopPropagation) {
 				e.stopPropagation();
 			}
-			if (e.target.nodeName == 'LI' && e.target.hasAttribute('draggable')) {
-				var ol = e.currentTarget,
-					li = e.target;
-				// remember li display mode
-				display = li.style.display;
+			if (e.target.nodeName == 'DIV' && e.target.hasAttribute('draggable')) {
+				var box = e.currentTarget,
+					el = e.target;
+				// remember el display mode
+				originalDisplay = el.style.display;
 				e.dataTransfer.effectAllowed = 'move';
 				// remember which node is being dragged
-				dragEl = li;
+				originalElement = el;
 				// timeout needed to avoid dragend being fired right away
 				window.setTimeout(function() {
-					ol.insertBefore(placeholder, dragEl);
-					dragEl.style.display = 'none';
+					box.insertBefore(placeholder, originalElement);
+					originalElement.style.display = 'none';
 				}, 1);
 			}
 		}
@@ -60,15 +50,16 @@ Element providing solution to no problem in particular.
 			if (e.stopPropagation) {
 				e.stopPropagation();
 			}
-			var ol = e.currentTarget,
-				li = e.target;
+			var box = e.currentTarget,
+				el = e.target;
 			e.dataTransfer.dropEffect = 'move';
-			ol.insertBefore(dragEl, placeholder);
+			box.insertBefore(originalElement, placeholder);
 			// restore dragged element display mode
-			dragEl.style.display = display;
+			originalElement.style.display = originalDisplay;
 			// detach the placeholder
-			placeholder = ol.removeChild(placeholder);
-			dragEl = null;
+			placeholder = box.removeChild(placeholder);
+			originalElement = null;
+			this.fire('ranked');
 		}
 
 		function handleDragEnter(e) {
@@ -76,17 +67,16 @@ Element providing solution to no problem in particular.
 				e.stopPropagation();
 			}
 			var dest;
-			if (e.target.nodeName == 'LI' && e.target.hasAttribute('draggable')) {
-				var ol = e.currentTarget,
-					li = e.target;
-				if (getIndex(placeholder) < getIndex(li)) {
-					dest = li.nextSibling;
+			if (e.target.nodeName == 'DIV' && e.target.hasAttribute('draggable')) {
+				var box = e.currentTarget,
+					el = e.target;
+				if (getIndex(placeholder) < getIndex(el)) {
+					dest = el.nextSibling;
 				} else {
-					dest = li;
+					dest = el;
 				}
-				ol.insertBefore(placeholder, dest);
+				box.insertBefore(placeholder, dest);
 			}
-
 		}
 
 		// function handleDragLeave(e) {
@@ -98,22 +88,28 @@ Element providing solution to no problem in particular.
 		// 	// }
 		// }
 
-		Polymer('q2-ranking', {
+		function handleRanked(e) {
+			console.log('ranked!');
+			[].forEach.call(this.querySelectorAll(this.autonum), function(node, i) {
+				node.innerText = i+1;
+			});
+		}
 
+		Polymer('q2-ranking', {
+			autonum: '',
 			ready: function() {
 				// Ready is a lifecycle callback.
 				// You can do setup work in here.
 				// More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
-				this.candidates = [
-					{key: 'o1', label: 'Opt 1'},
-					{key: 'o2', label: 'Opt 2'},
-					{key: 'o3', label: 'Opt 3'},
-					{key: 'o4', label: 'Opt 4'},
-				];
 
-				var list = this.$["ranking"];
-				placeholder = list.querySelector('[rel=placeholder]');
-				placeholder = list.removeChild(placeholder);
+				var list = this;
+				placeholder = document.createElement('div');
+				placeholder.innerText = "here";
+				[].forEach.call(list.children, function(node) {
+					if (!node.hasAttribute('draggable')) {
+						node.setAttribute('draggable', true);
+					}
+				});
 
 				list.addEventListener('dragstart', handleDragStart, false);
 				list.addEventListener('dragenter', handleDragEnter, false)
@@ -121,15 +117,19 @@ Element providing solution to no problem in particular.
 				// list.addEventListener('dragleave', handleDragLeave, false);
 				// list.addEventListener('drop', handleDrop, false);
 				list.addEventListener('dragend', handleDragEnd, false);
+				// If there is such a property and it actually selects something,
+				// setup a ranked callback.
+				if (this.autonum && this.querySelector(this.autonum)) {
+					handleRanked.call(this);
+					list.addEventListener('ranked', handleRanked.bind(this), false);
+				}
 			},
 			getRanking: function() {
-				return [].map.call(this.$["ranking"].querySelectorAll('li'), function(node) {
+				return [].map.call(this.querySelectorAll('div'), function(node) {
 					return node.getAttribute('rel');
 				});
 			}
-
 		});
-
 	</script>
 
 </polymer-element>
