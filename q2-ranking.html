@@ -12,7 +12,7 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://polymerlabs.github.io/seed-element
 -->
-<polymer-element name="q2-ranking" attributes="autonum">
+<polymer-element name="q2-ranking" attributes="autonum readval">
 
 	<template>
 		<link rel="stylesheet" href="q2-ranking.css" />
@@ -89,6 +89,7 @@ Element providing solution to no problem in particular.
 
 		Polymer('q2-ranking', {
 			autonum: '',
+			readval: '[rel]',
 			ready: function() {
 				// Ready is a lifecycle callback.
 				// You can do setup work in here.
@@ -117,8 +118,19 @@ Element providing solution to no problem in particular.
 				}
 			},
 			getRanking: function() {
-				return [].map.call(this.querySelectorAll('div'), function(node) {
-					return node.getAttribute('rel');
+				var valGetter, attr;
+				if (this.readval.indexOf('[') > -1) {
+					attr = this.readval.slice(this.readval.indexOf('[')+1, this.readval.indexOf(']'));
+					valGetter = function(node) {
+						return node.getAttribute(attr);
+					}
+				} else {
+					valGetter = function(node) {
+						return node.textContent;
+					}
+				}
+				return [].map.call(this.querySelectorAll(this.readval), function(node) {
+					return valGetter(node);
 				});
 			}
 		});
