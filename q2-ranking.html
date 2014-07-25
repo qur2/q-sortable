@@ -31,6 +31,8 @@ Element providing solution to no problem in particular.
 				e.stopPropagation();
 			}
 			if (e.target.nodeName == 'DIV' && e.target.hasAttribute('draggable')) {
+				// FF needs this
+				e.dataTransfer.setData('text/plain', null);
 				var box = e.currentTarget,
 					el = e.target;
 				// remember el display mode
@@ -79,17 +81,7 @@ Element providing solution to no problem in particular.
 			}
 		}
 
-		// function handleDragLeave(e) {
-		// 	if (e.stopPropagation) {
-		// 		e.stopPropagation(); // Stops some browsers from redirecting.
-		// 	}
-		// 	// if (e.target.nodeName == 'OL') {
-		// 	// 	e.dataTransfer.effectAllowed = 'none';
-		// 	// }
-		// }
-
 		function handleRanked(e) {
-			console.log('ranked!');
 			[].forEach.call(this.querySelectorAll(this.autonum), function(node, i) {
 				node.textContent = i+1;
 			});
