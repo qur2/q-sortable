@@ -91,7 +91,7 @@ Element providing solution to no problem in particular.
 		function handleRanked(e) {
 			console.log('ranked!');
 			[].forEach.call(this.querySelectorAll(this.autonum), function(node, i) {
-				node.innerText = i+1;
+				node.textContent = i+1;
 			});
 		}
 
@@ -104,7 +104,7 @@ Element providing solution to no problem in particular.
 
 				var list = this;
 				placeholder = document.createElement('div');
-				placeholder.innerText = "here";
+				placeholder.textContent = "here";
 				[].forEach.call(list.children, function(node) {
 					if (!node.hasAttribute('draggable')) {
 						node.setAttribute('draggable', true);
